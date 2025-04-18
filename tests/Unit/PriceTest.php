@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Performing\FeedBuilder\Formatter\Model\ProductField;
-
 use Performing\FeedBuilder\Objects\Price;
 
 it('constructs price with correct amount and currency', function (string $amount, string $currency) {
