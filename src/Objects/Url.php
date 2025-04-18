@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sokil\Merchant\ProductFeed\Model\ProductField;
+namespace Performing\FeedBuilder\Objects;
 
 class Url extends AbstractScalarField
 {

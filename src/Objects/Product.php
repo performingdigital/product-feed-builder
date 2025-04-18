@@ -1,12 +1,14 @@
 <?php
 
-namespace Sokil\Merchant\ProductFeed\Model;
+declare(strict_types=1);
 
-use Sokil\Merchant\ProductFeed\Model\ProductField\Availability;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Condition;
-use Sokil\Merchant\ProductFeed\Model\ProductField\DateTimeRange;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Price;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Url;
+namespace Performing\FeedBuilder\Objects;
+
+use Performing\FeedBuilder\Objects\Availability;
+use Performing\FeedBuilder\Objects\Condition;
+use Performing\FeedBuilder\Objects\DateTimeRange;
+use Performing\FeedBuilder\Objects\Price;
+use Performing\FeedBuilder\Objects\Url;
 
 /**
  * Element of feed
@@ -14,220 +16,88 @@ use Sokil\Merchant\ProductFeed\Model\ProductField\Url;
 class Product
 {
     /**
-     * Unique ID for item. Can be a variant for a product. Use the SKU if you can.
-     *
-     * For Facebook must be less or equal 100 chars
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
-     * A specific, relevant title for the item
-     *
-     * For Facebook must be less or equal 150 chars
-     *
-     * @var string
-     */
-    private $title;
-
-    /**
-     * A short, relevant description of the item. Include specific or unique product features, such as like material or color.
-     *
-     * For Facebook must be less or equal 5000 chars
-     *
-     * @link https://www.facebook.com/business/help/2302017289821154?id=663946777378466 Facebook requirements
-     *
-     * @var string
-     */
-    private $description;
-
-    /**
-     * Current availability of the item in your store
-     *
-     * @var Availability
-     */
-    private $availability;
-
-    /**
-     * Condition of the item in your store
-     *
-     * @var Condition
-     */
-    private $condition;
-
-    /**
-     * Current price of the item
-     *
-     * @var Price
-     */
-    private $price;
-
-    /**
      * Optional. Required if sale.
      * Discounted price and currency of the item, if the item is on sale.
-     *
-     * @var Price|null
      */
-    private $salePrice;
+    private ?Price $salePrice;
 
-    /**
-     * URL of the specific product page where people can buy the item.
-     *
-     * @var Url
-     */
-    private $link;
+    private string|int|null $facebookProductCategory;
 
-    /**
-     * URL for the main image of your item
-     *
-     * @link https://www.facebook.com/business/help/686259348512056 Facebook recommendations
-     *
-     * @var Url
-     */
-    private $imageLink;
+    private string|int|null $googleProductCategory;
 
-    /**
-     * Brand name, unique manufacturer part number (MPN), or Global Trade Item Number (GTIN) of the item.
-     *
-     * @var string
-     */
-    private $brand;
+    private ?string $internalProductCategory;
 
-    /**
-     * @var string|int|null
-     */
-    private $facebookProductCategory;
+    private ?int $inventory;
 
-    /**
-     * @var string|int|null
-     */
-    private $googleProductCategory;
+    private ?DateTimeRange $salePriceEffectiveDate;
 
-    /**
-     * @var string|null
-     */
-    private $internalProductCategory;
-
-    /**
-     * @var int|null
-     */
-    private $inventory;
-
-    /**
-     * @var DateTimeRange|null
-     */
-    private $salePriceEffectiveDate;
-
-    /**
-     * @param string $id
-     * @param string $title
-     * @param string $description
-     * @param Availability $availability
-     * @param Condition $condition
-     * @param Price $price
-     * @param Url $link
-     * @param Url $imageLink
-     * @param string $brand
-     */
     public function __construct(
-        string $id,
-        string $title,
-        string $description,
-        Availability $availability,
-        Condition $condition,
-        Price $price,
-        Url $link,
-        Url $imageLink,
-        string $brand
-    ) {
-        $this->id = $id;
-        $this->title = $title;
-        $this->description = $description;
-        $this->availability = $availability;
-        $this->condition = $condition;
-        $this->price = $price;
-        $this->link = $link;
-        $this->imageLink = $imageLink;
-        $this->brand = $brand;
-    }
+        /** Unique ID for item. Can be a variant for a product. Use the SKU if you can. For Facebook must be less or equal 100 chars */
+        private string $id,
+        /** A specific, relevant title for the item. For Facebook must be less or equal 150 chars */
+        private string $title,
+        /** A short, relevant description of the item. Include specific or unique product features, such as like material or color. For Facebook must be less or equal 5000 chars */
+        private string $description,
+        /** Current availability of the item in your store */
+        private Availability $availability,
+        /** Condition of the item in your store */
+        private Condition $condition,
+        /** Current price of the item */
+        private Price $price,
+        /** URL of the specific product page where people can buy the item */
+        private Url $link,
+        /** URL for the main image of your item */
+        private Url $imageLink,
+        /** Brand name, unique manufacturer part number (MPN), or Global Trade Item Number (GTIN) of the item */
+        private string $brand,
+    ) {}
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @return Availability
-     */
     public function getAvailability(): Availability
     {
         return $this->availability;
     }
 
-    /**
-     * @return Condition
-     */
     public function getCondition(): Condition
     {
         return $this->condition;
     }
 
-    /**
-     * @return Price
-     */
     public function getPrice(): Price
     {
         return $this->price;
     }
 
-    /**
-     * @return Url
-     */
     public function getLink(): Url
     {
         return $this->link;
     }
 
-    /**
-     * @return Url
-     */
     public function getImageLink(): Url
     {
         return $this->imageLink;
     }
 
-    /**
-     * @return string
-     */
     public function getBrand(): string
     {
         return $this->brand;
     }
 
-    /**
-     * @return int|string|null
-     */
-    public function getFacebookProductCategory()
+    public function getFacebookProductCategory(): string|int|null
     {
         return $this->facebookProductCategory;
     }
@@ -256,7 +126,7 @@ class Product
      */
     public function setFacebookProductCategory($facebookProductCategory): void
     {
-        if (($facebookProductCategory) || !is_int($facebookProductCategory) || !is_string($facebookProductCategory)) {
+        if ($facebookProductCategory || !is_int($facebookProductCategory) || !is_string($facebookProductCategory)) {
             throw new \InvalidArgumentException('Facebook product category must me taxonomy path or int');
         }
 
@@ -291,7 +161,7 @@ class Product
      */
     public function setGoogleProductCategory($googleProductCategory): void
     {
-        if (($googleProductCategory) || !is_int($googleProductCategory) || !is_string($googleProductCategory)) {
+        if ($googleProductCategory || !is_int($googleProductCategory) || !is_string($googleProductCategory)) {
             throw new \InvalidArgumentException('Google product category must me taxonomy path or int');
         }
 
@@ -321,9 +191,6 @@ class Product
         $this->internalProductCategory = $internalProductCategory;
     }
 
-    /**
-     * @return int|null
-     */
     public function getInventory(): ?int
     {
         return $this->inventory;
@@ -349,9 +216,6 @@ class Product
         $this->inventory = $inventory;
     }
 
-    /**
-     * @return Price|null
-     */
     public function getSalePrice(): ?Price
     {
         return $this->salePrice;
@@ -360,17 +224,12 @@ class Product
     /**
      * Optional. Required if sale.
      * Discounted price and currency of the item, if the item is on sale.
-     *
-     * @param Price $salePrice
      */
     public function setSalePrice(Price $salePrice): void
     {
         $this->salePrice = $salePrice;
     }
 
-    /**
-     * @return DateTimeRange|null
-     */
     public function getSalePriceEffectiveDate(): ?DateTimeRange
     {
         return $this->salePriceEffectiveDate;
@@ -382,8 +241,6 @@ class Product
      * Time range for your sale period, including the date, time, and time zone when your sale starts and ends.
      * If you don't enter sale dates, any items with a {@see $salePrice} remains on sale until
      * you remove their sale price.
-     *
-     * @param DateTimeRange|null $salePriceEffectiveDate
      */
     public function setSalePriceEffectiveDate(?DateTimeRange $salePriceEffectiveDate): void
     {

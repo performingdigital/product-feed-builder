@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sokil\Merchant\ProductFeed\Formatter\Strategy\Facebook;
+namespace Performing\FeedBuilder\Formatter\Strategy\Facebook;
 
-use Sokil\Merchant\ProductFeed\Formatter\FeedEncoderInterface;
-use Sokil\Merchant\ProductFeed\Formatter\ProductNormaliserInterface;
-use Sokil\Merchant\ProductFeed\Model\Feed;
+use Performing\FeedBuilder\Formatter\FeedEncoderInterface;
+use Performing\FeedBuilder\Formatter\ProductNormaliserInterface;
+use Performing\FeedBuilder\Feed;
 
 /**
  * Comma-separated value. Works with most spreadsheet programs. The first row specifies the column header. Subsequent
@@ -45,7 +45,9 @@ class FacebookFeedCsvEncoder implements FeedEncoderInterface
     private function arrayToCsv(array $row): string
     {
         $csvFile = fopen('php://memory', 'w+');
-        fputcsv($csvFile, $row, ',', '"');
+        fputcsv($csvFile, array_map(function ($item) {
+            return json_decode(json_encode($item));
+        }, $row), ',');
         rewind($csvFile);
         return trim(stream_get_contents($csvFile));
     }

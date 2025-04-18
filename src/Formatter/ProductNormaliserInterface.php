@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sokil\Merchant\ProductFeed\Formatter;
+namespace Performing\FeedBuilder\Formatter;
 
-use Sokil\Merchant\ProductFeed\Model\Product;
+use Performing\FeedBuilder\Objects\Product;
 
 interface ProductNormaliserInterface
 {

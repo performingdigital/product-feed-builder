@@ -2,31 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Sokil\Merchant\ProductFeed\Formatter\Strategy\Facebook;
+namespace Performing\FeedBuilder\Formatter\Strategy\Facebook;
 
-use Sokil\Merchant\ProductFeed\Formatter\ProductNormaliserInterface;
-use Sokil\Merchant\ProductFeed\Model\Product;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Availability;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Condition;
+use Performing\FeedBuilder\Formatter\ProductNormaliserInterface;
+use Performing\FeedBuilder\Objects\Product;
 
 /**
  * @link https://developers.facebook.com/docs/commerce-platform/catalog/fields#additional-fields
  */
 class FacebookProductNormaliser implements ProductNormaliserInterface
 {
-    private const AVAILABILITY_MAP = [
-        Availability::IN_STOCK => 'in stock',
-        Availability::AVAILABLE_FOR_ORDER => 'available for order',
-        Availability::OUT_OF_STOCK => 'out of stock',
-        Availability::DISCONTINUED => 'discontinued',
-    ];
-
-    private const CONDITION_MAP = [
-        Condition::NEW => 'new',
-        Condition::REFURBISHED => 'refurbished',
-        Condition::USED => 'used',
-    ];
-
     public function normalise(Product $product): array
     {
         if (mb_strlen($product->getId()) > 100) {
@@ -41,12 +26,12 @@ class FacebookProductNormaliser implements ProductNormaliserInterface
             throw new \InvalidArgumentException('Product title must be less or equal 5000 characters');
         }
 
-        $availability = self::AVAILABILITY_MAP[$product->getAvailability()->getValue()] ?? null;
+        $availability = $product->getAvailability();
         if (empty($availability)) {
             throw new \InvalidArgumentException('Unknown availability specified');
         }
 
-        $condition = self::CONDITION_MAP[$product->getCondition()->getValue()] ?? null;
+        $condition = $product->getCondition();
         if (empty($condition)) {
             throw new \InvalidArgumentException('Unknown condition specified');
         }
@@ -70,6 +55,4 @@ class FacebookProductNormaliser implements ProductNormaliserInterface
     {
         return strtolower($marketingPlatform) === 'facebook';
     }
-
-
 }

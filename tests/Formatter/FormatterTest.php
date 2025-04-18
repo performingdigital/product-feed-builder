@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Sokil\Merchant\ProductFeed\Formatter;
+namespace Performing\FeedBuilder\Formatter;
 
+use Performing\FeedBuilder\Feed;
+use Performing\FeedBuilder\Objects\Product;
 use PHPUnit\Framework\TestCase;
-use Sokil\Merchant\ProductFeed\Model\Feed;
-use Sokil\Merchant\ProductFeed\Model\Product;
 
 class FormatterTest extends TestCase
 {
     public function testFormat()
     {
-        $normaliser = new class() implements ProductNormaliserInterface
-        {
+        $normaliser = new class() implements ProductNormaliserInterface {
             public function normalise(Product $product): array
             {
                 return [
@@ -25,11 +24,9 @@ class FormatterTest extends TestCase
             {
                 return $marketingPlatform === 'platform';
             }
-
         };
 
-        $encoder = new class() implements FeedEncoderInterface
-        {
+        $encoder = new class() implements FeedEncoderInterface {
             public function encode(Feed $feed, ProductNormaliserInterface $productNormaliser): \Generator
             {
                 foreach ($feed as $product) {
@@ -41,12 +38,11 @@ class FormatterTest extends TestCase
             {
                 return $marketingPlatform === 'platform' && $format === 'format';
             }
-
         };
 
         $formatter = new Formatter(
             [$normaliser],
-            [$encoder]
+            [$encoder],
         );
 
         $feed = new Feed([$this->createMock(Product::class)]);
@@ -55,7 +51,7 @@ class FormatterTest extends TestCase
 
         $this->assertEquals(
             '{"param":42}',
-            implode('', iterator_to_array($generator))
+            implode('', iterator_to_array($generator)),
         );
     }
 }

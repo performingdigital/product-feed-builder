@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Sokil\Merchant\ProductFeed\Formatter\Strategy\Facebook;
+namespace Performing\FeedBuilder\Formatter\Strategy\Facebook;
 
+use Performing\FeedBuilder\Feed;
+use Performing\FeedBuilder\Objects\Availability;
+use Performing\FeedBuilder\Objects\Condition;
+use Performing\FeedBuilder\Objects\Price;
+use Performing\FeedBuilder\Objects\Product;
+use Performing\FeedBuilder\Objects\Url;
 use PHPUnit\Framework\TestCase;
-use Sokil\Merchant\ProductFeed\Model\Feed;
-use Sokil\Merchant\ProductFeed\Model\Product;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Availability;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Condition;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Price;
-use Sokil\Merchant\ProductFeed\Model\ProductField\Url;
 
 class FacebookFeedCsvEncoderTest extends TestCase
 {
     public function testEncode()
     {
         $product = new Product(
-            'sku',
-            'title',
-            'description',
-            new Availability(Availability::IN_STOCK),
-            new Condition(Condition::NEW),
-            new Price('42.42', 'UAH'),
-            new Url('https://example.com/item'),
-            new Url('https://example.com/item.png'),
-            'SomeBrand'
+            id: 'sku',
+            title: 'title',
+            description: 'description',
+            availability: Availability::InStock,
+            condition: Condition::New,
+            price: new Price('42.42', 'UAH'),
+            link: new Url('https://example.com/item'),
+            imageLink: new Url('https://example.com/item.png'),
+            brand: 'SomeBrand',
         );
 
         $feed = new Feed([$product]);
@@ -42,7 +42,7 @@ class FacebookFeedCsvEncoderTest extends TestCase
 
         $this->assertSame(
             $expectedOutput,
-            $actualOutput
+            $actualOutput,
         );
     }
 }
