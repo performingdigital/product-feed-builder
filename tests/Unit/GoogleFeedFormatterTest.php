@@ -11,14 +11,14 @@ use Performing\FeedBuilder\Objects\Product;
 use Performing\FeedBuilder\Objects\Url;
 
 beforeEach(function() {
-    $this->tempFile = sys_get_temp_dir() . '/google-feed-test-' . uniqid() . '.xml';
+    $this->tempFile = __DIR__ . '/../cache.xml';
 });
 
-afterEach(function() {
-    if (file_exists($this->tempFile)) {
-        unlink($this->tempFile);
-    }
-});
+// afterEach(function() {
+//     if (file_exists($this->tempFile)) {
+//         unlink($this->tempFile);
+//     }
+// });
 
 test('GoogleFeedFormatter creates a valid XML file', function () {
     // Create a product
@@ -33,32 +33,32 @@ test('GoogleFeedFormatter creates a valid XML file', function () {
         new Url('https://example.com/product.jpg'),
         'Test Brand'
     );
-    
+
     // Create a feed with the product
     $feed = new Feed([$product]);
-    
+
     // Format the feed
     $formatter = new GoogleFeedFormatter($this->tempFile);
     $formatter->format($feed);
-    
+
     // Check that the file exists
     expect(file_exists($this->tempFile))->toBeTrue();
-    
+
     // Load the XML file
     $xml = simplexml_load_file($this->tempFile);
-    
+
     // Check that it's a valid RSS feed
     expect($xml->getName())->toBe('rss');
     expect($xml->channel)->not->toBeNull();
-    
+
     // Check that there's exactly one item
     expect($xml->channel->item->count())->toBe(1);
-    
+
     // Check product data in XML
     $item = $xml->channel->item[0];
     $ns = $item->getNamespaces(true);
     $g = $item->children($ns['g']);
-    
+
     expect((string)$g->id)->toBe('test-product-1');
     expect((string)$item->title)->toBe('Test Product');
     expect((string)$item->description)->toBe('This is a test product description');
@@ -96,17 +96,17 @@ test('GoogleFeedFormatter handles multiple products', function () {
             'Test Brand'
         ),
     ];
-    
+
     // Create a feed with the products
     $feed = new Feed($products);
-    
+
     // Format the feed
     $formatter = new GoogleFeedFormatter($this->tempFile);
     $formatter->format($feed);
-    
+
     // Load the XML file
     $xml = simplexml_load_file($this->tempFile);
-    
+
     // Check that there are exactly two items
     expect($xml->channel->item->count())->toBe(2);
 });
@@ -129,20 +129,20 @@ test('GoogleFeedFormatter includes optional fields when provided', function () {
         null,
         10 // inventory
     );
-    
+
     // Create a feed with the product
     $feed = new Feed([$product]);
-    
+
     // Format the feed
     $formatter = new GoogleFeedFormatter($this->tempFile);
     $formatter->format($feed);
-    
+
     // Load the XML file
     $xml = simplexml_load_file($this->tempFile);
     $item = $xml->channel->item[0];
     $ns = $item->getNamespaces(true);
     $g = $item->children($ns['g']);
-    
+
     // Check optional fields
     expect((string)$g->sale_price)->toBe('15.99 USD');
     expect((string)$g->google_product_category)->toBe('123');
