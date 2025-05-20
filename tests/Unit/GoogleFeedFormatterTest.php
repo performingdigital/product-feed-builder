@@ -9,16 +9,17 @@ use Performing\FeedBuilder\Objects\Condition;
 use Performing\FeedBuilder\Objects\Price;
 use Performing\FeedBuilder\Objects\Product;
 use Performing\FeedBuilder\Objects\Url;
+use Performing\FeedBuilder\Writers\StreamWriter;
 
 beforeEach(function() {
     $this->tempFile = __DIR__ . '/../cache.xml';
 });
 
-// afterEach(function() {
-//     if (file_exists($this->tempFile)) {
-//         unlink($this->tempFile);
-//     }
-// });
+afterEach(function() {
+    if (file_exists($this->tempFile)) {
+        unlink($this->tempFile);
+    }
+});
 
 test('GoogleFeedFormatter creates a valid XML file', function () {
     // Create a product
@@ -38,7 +39,9 @@ test('GoogleFeedFormatter creates a valid XML file', function () {
     $feed = new Feed([$product]);
 
     // Format the feed
-    $formatter = new GoogleFeedFormatter($this->tempFile);
+    $resource = fopen($this->tempFile, 'w');
+    $writer = new StreamWriter($resource);
+    $formatter = new GoogleFeedFormatter($writer);
     $formatter->format($feed);
 
     // Check that the file exists
@@ -100,8 +103,9 @@ test('GoogleFeedFormatter handles multiple products', function () {
     // Create a feed with the products
     $feed = new Feed($products);
 
-    // Format the feed
-    $formatter = new GoogleFeedFormatter($this->tempFile);
+    $resource = fopen($this->tempFile, 'w');
+    $writer = new StreamWriter($resource);
+    $formatter = new GoogleFeedFormatter($writer);
     $formatter->format($feed);
 
     // Load the XML file
@@ -133,8 +137,9 @@ test('GoogleFeedFormatter includes optional fields when provided', function () {
     // Create a feed with the product
     $feed = new Feed([$product]);
 
-    // Format the feed
-    $formatter = new GoogleFeedFormatter($this->tempFile);
+    $resource = fopen($this->tempFile, 'w');
+    $writer = new StreamWriter($resource);
+    $formatter = new GoogleFeedFormatter($writer);
     $formatter->format($feed);
 
     // Load the XML file
