@@ -18,11 +18,7 @@ class Url implements Field
 {
     public function __construct(
         protected string $value
-    ) {
-        if (!filter_var($value, FILTER_VALIDATE_URL)) {
-            throw new \UnexpectedValueException('Invalid URL');
-        }
-    }
+    ) {}
     
     public function getValue(): string
     {
