@@ -86,7 +86,7 @@ class Product
         private Url $link,
         
         /** URL for the main image of your item */
-        private Url $imageLink,
+        private ?Url $imageLink,
         
         /** Brand name, unique manufacturer part number (MPN), or Global Trade Item Number (GTIN) of the item */
         private string $brand,
