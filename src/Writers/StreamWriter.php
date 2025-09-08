@@ -25,6 +25,7 @@ class StreamWriter implements Writer
         $this->xml->startElement('rss');
         $this->xml->writeAttribute('version', '2.0');
         $this->xml->writeAttribute('xmlns:g', 'http://base.google.com/ns/1.0');
+        $this->xml->writeAttribute('xmlns:custom', 'http://example.com/custom');
 
         $this->xml->startElement('channel');
     }
