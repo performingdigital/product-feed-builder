@@ -54,6 +54,11 @@ class GoogleFeedFormatter implements FormatterInterface
         $this->writer->writeElement('g:brand', $product->getBrand());
         $this->writer->writeElement('g:condition', $product->getCondition()->toString());
 
+
+        foreach ($product->getCustomFields() as $key => $value) {
+            $this->writer->writeElement('custom:' . $key, $value);
+        }
+
         // Optional fields
         if ($product->getGoogleProductCategory()) {
             $this->writer->writeElement('g:google_product_category', (string) $product->getGoogleProductCategory());

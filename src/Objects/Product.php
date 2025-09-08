@@ -12,18 +12,18 @@ use Performing\FeedBuilder\Objects\Url;
 
 /**
  * Element of feed
- * 
+ *
  * When Bag library is installed, this class should be updated to use:
  * extends Bag
- * 
+ *
  * #[Required]
  * #[Str]
  * public readonly string $id
- * 
+ *
  * #[Required]
  * #[Str]
  * public readonly string $title
- * 
+ *
  * etc.
  */
 class Product
@@ -63,34 +63,36 @@ class Product
      */
     private ?DateTimeRange $salePriceEffectiveDate = null;
 
+    protected array $customFields = [];
+
     public function __construct(
         /** Unique ID for item. Can be a variant for a product. Use the SKU if you can. For Facebook must be less or equal 100 chars */
         private string $id,
-        
+
         /** A specific, relevant title for the item. For Facebook must be less or equal 150 chars */
         private string $title,
-        
+
         /** A short, relevant description of the item. Include specific or unique product features, such as like material or color. For Facebook must be less or equal 5000 chars */
         private string $description,
-        
+
         /** Current availability of the item in your store */
         private Availability $availability,
-        
+
         /** Condition of the item in your store */
         private Condition $condition,
-        
+
         /** Current price of the item */
         private Price $price,
-        
+
         /** URL of the specific product page where people can buy the item */
         private Url $link,
-        
+
         /** URL for the main image of your item */
         private Url $imageLink,
-        
+
         /** Brand name, unique manufacturer part number (MPN), or Global Trade Item Number (GTIN) of the item */
         private string $brand,
-        
+
         ?Price $salePrice = null,
         string|int|null $facebookProductCategory = null,
         string|int|null $googleProductCategory = null,
@@ -102,14 +104,26 @@ class Product
         $this->facebookProductCategory = $facebookProductCategory;
         $this->googleProductCategory = $googleProductCategory;
         $this->internalProductCategory = $internalProductCategory;
-        
+
         // Validate inventory is positive
         if ($inventory !== null && $inventory < 1) {
             throw new \OutOfBoundsException('Inventory must be positive');
         }
         $this->inventory = $inventory;
-        
+
         $this->salePriceEffectiveDate = $salePriceEffectiveDate;
+    }
+
+    public function additional(array $customFields): self
+    {
+        $this->customFields = $customFields;
+
+        return $this;
+    }
+
+    public function getCustomFields(): array
+    {
+        return $this->customFields;
     }
 
     public function getId(): string
@@ -161,7 +175,7 @@ class Product
     {
         return $this->facebookProductCategory;
     }
-    
+
     public function setFacebookProductCategory(string|int|null $facebookProductCategory): void
     {
         $this->facebookProductCategory = $facebookProductCategory;
@@ -171,7 +185,7 @@ class Product
     {
         return $this->googleProductCategory;
     }
-    
+
     public function setGoogleProductCategory(string|int|null $googleProductCategory): void
     {
         $this->googleProductCategory = $googleProductCategory;
@@ -181,7 +195,7 @@ class Product
     {
         return $this->internalProductCategory;
     }
-    
+
     public function setInternalProductCategory(?string $internalProductCategory): void
     {
         $this->internalProductCategory = $internalProductCategory;
@@ -191,13 +205,13 @@ class Product
     {
         return $this->inventory;
     }
-    
+
     public function setInventory(?int $inventory): void
     {
         if ($inventory !== null && $inventory < 1) {
             throw new \OutOfBoundsException('Inventory must be positive');
         }
-        
+
         $this->inventory = $inventory;
     }
 
@@ -205,7 +219,7 @@ class Product
     {
         return $this->salePrice;
     }
-    
+
     public function setSalePrice(?Price $salePrice): void
     {
         $this->salePrice = $salePrice;
@@ -215,12 +229,12 @@ class Product
     {
         return $this->salePriceEffectiveDate;
     }
-    
+
     public function setSalePriceEffectiveDate(?DateTimeRange $salePriceEffectiveDate): void
     {
         $this->salePriceEffectiveDate = $salePriceEffectiveDate;
     }
-    
+
     /**
      * Future implementation with Bag validation
      * This will be activated once Bag library is installed
