@@ -56,7 +56,7 @@ class GoogleFeedFormatter implements FormatterInterface
 
 
         foreach ($product->getCustomFields() as $key => $value) {
-            $this->writer->writeElement('custom:' . $key, $value);
+            $this->writer->writeElement($key, $value);
         }
 
         // Optional fields
