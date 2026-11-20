@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Performing\FeedBuilder\Formatters;
 
 use Performing\FeedBuilder\Feed;
-use Performing\FeedBuilder\Objects\Price;
 use Performing\FeedBuilder\Objects\Product;
 use Performing\FeedBuilder\Writers\CsvMemoryWriter;
 use Performing\FeedBuilder\Writers\CsvWriterInterface;
@@ -54,7 +53,7 @@ class OpenAiFeedFormatter implements FormatterInterface
             'brand' => $product->getBrand(),
             'image_url' => $product->getImageLink()->toString(),
             'availability' => str_replace(' ', '_', $product->getAvailability()->toString()),
-            'price' => $this->price($product->getPrice()),
+            'price' => $product->getPrice()->toString(),
             'seller_name' => $this->sellerName,
             'target_countries' => $this->country,
             'store_country' => $this->country,
@@ -62,18 +61,8 @@ class OpenAiFeedFormatter implements FormatterInterface
             'is_ads_eligible' => 'true',
 
             // Optional fields
-            'sale_price' => $product->getSalePrice() ? $this->price($product->getSalePrice()) : '',
+            'sale_price' => $product->getSalePrice()?->toString() ?? '',
             'ads_metadata' => $product->getCustomFields() ? json_encode($product->getCustomFields(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '',
         ]);
-    }
-
-    /**
-     * OpenAI wants the price with decimals, e.g. "12500.00 EUR"
-     */
-    private function price(Price $price): string
-    {
-        $amount = $price->getAmount();
-
-        return (str_contains($amount, '.') ? $amount : "{$amount}.00") . ' ' . $price->getIso4210Currency();
     }
 }
