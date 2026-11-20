@@ -9,7 +9,7 @@ use Performing\FeedBuilder\Objects\Condition;
 use Performing\FeedBuilder\Objects\Price;
 use Performing\FeedBuilder\Objects\Product;
 use Performing\FeedBuilder\Objects\Url;
-use Performing\FeedBuilder\Writers\StreamWriter;
+use Performing\FeedBuilder\Writers\XmlStreamWriter;
 
 beforeEach(function() {
     $this->tempFile = __DIR__ . '/../cache.xml';
@@ -40,7 +40,7 @@ test('GoogleFeedFormatter creates a valid XML file', function () {
 
     // Format the feed
     $resource = fopen($this->tempFile, 'w');
-    $writer = new StreamWriter($resource);
+    $writer = new XmlStreamWriter($resource);
     $formatter = new GoogleFeedFormatter($writer);
     $formatter->format($feed);
 
@@ -104,7 +104,7 @@ test('GoogleFeedFormatter handles multiple products', function () {
     $feed = new Feed($products);
 
     $resource = fopen($this->tempFile, 'w');
-    $writer = new StreamWriter($resource);
+    $writer = new XmlStreamWriter($resource);
     $formatter = new GoogleFeedFormatter($writer);
     $formatter->format($feed);
 
@@ -138,7 +138,7 @@ test('GoogleFeedFormatter includes optional fields when provided', function () {
     $feed = new Feed([$product]);
 
     $resource = fopen($this->tempFile, 'w');
-    $writer = new StreamWriter($resource);
+    $writer = new XmlStreamWriter($resource);
     $formatter = new GoogleFeedFormatter($writer);
     $formatter->format($feed);
 

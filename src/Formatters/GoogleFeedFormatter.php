@@ -6,8 +6,8 @@ namespace Performing\FeedBuilder\Formatters;
 
 use Performing\FeedBuilder\Feed;
 use Performing\FeedBuilder\Objects\Product;
-use Performing\FeedBuilder\Writers\MemoryWriter;
-use Performing\FeedBuilder\Writers\Writer;
+use Performing\FeedBuilder\Writers\XmlMemoryWriter;
+use Performing\FeedBuilder\Writers\XmlWriterInterface;
 use XMLWriter;
 
 /**
@@ -18,7 +18,7 @@ use XMLWriter;
 class GoogleFeedFormatter implements FormatterInterface
 {
     public function __construct(
-        protected Writer $writer = new MemoryWriter(),
+        protected XmlWriterInterface $writer = new XmlMemoryWriter(),
     ) {}
 
     /**
