@@ -45,9 +45,14 @@ class Price implements Field
         return $this->iso4210Currency;
     }
 
+    /**
+     * Price with two decimals and the currency, e.g. "12500.00 EUR"
+     */
     public function toString(): string
     {
-        return "{$this->getAmount()} {$this->getIso4210Currency()}";
+        $amount = number_format((float) $this->getAmount(), 2, '.', '');
+
+        return "{$amount} {$this->getIso4210Currency()}";
     }
     
     /**

@@ -1,6 +1,6 @@
 # php-merchant-product-feed
 
-Builder of Facebook and Google product feeds
+Builder of Google, Facebook and OpenAI product feeds
 
 [![Test](https://github.com/sokil/php-merchant-product-feed/workflows/Test/badge.svg?branch=main)](https://github.com/sokil/php-merchant-product-feed/actions?query=workflow%3ATest)
 [![Latest Stable Version](https://poser.pugx.org/sokil/php-merchant-product-feed/v/stable.png)](https://packagist.org/packages/sokil/php-merchant-product-feed)
@@ -60,3 +60,37 @@ foreach ($generator as $streamChunk) {
 }
         
 ```
+
+## OpenAI (ChatGPT Ads)
+
+### Useful links
+
+* [Product feed spec](https://developers.openai.com/commerce/specs/feed)
+* [Ads product feeds](https://developers.openai.com/ads/product-feeds)
+
+### Usage
+
+Products are built exactly as for the Google feed. Custom fields set with `additional()` are written to `ads_metadata`.
+
+```php
+<?php
+
+use Performing\FeedBuilder\Feed;
+use Performing\FeedBuilder\Formatters\OpenAiFeedFormatter;
+use Performing\FeedBuilder\Writers\CsvStreamWriter;
+
+// CSV returned as a string
+$csv = (new OpenAiFeedFormatter('Acme', 'US'))->format(new Feed([$product]));
+
+// or written to a stream
+(new OpenAiFeedFormatter('Acme', 'US', new CsvStreamWriter($stream)))->format(new Feed([$product]));
+```
+
+## Writers
+
+Formatters decide what to write, writers decide where to write it.
+
+* XML (Google): `XmlMemoryWriter` returns the feed as a string, `XmlStreamWriter` writes it to a stream.
+* CSV (OpenAI): `CsvMemoryWriter` returns the feed as a string, `CsvStreamWriter` writes it to a stream.
+
+`MemoryWriter`, `StreamWriter` and `Writer` still work, but are deprecated: use the `Xml*` names.
